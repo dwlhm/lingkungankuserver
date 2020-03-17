@@ -37,6 +37,20 @@ app.get("/", (req, res) => {
     res.json({text: "Hello World!"});
 });
 
+app.get("/get/position/:idAlat", (req, res) => {
+    db.collection("alat").doc("sampah").collection(req.params.idAlat).doc("position").get().then(sampahData => {
+        db.collection("alat").doc("sungai").collection(req.params.idAlat).doc("position").get().then(sungaiData => {
+            db.collection("alat").doc("udara").collection(req.params.idAlat).doc("position").get().then(udaraData => {
+                res.json({
+                    "sampah": sampahData.data(),
+                    "sungai": sungaiData.data(),
+                    "udara": udaraData.data()
+                });
+            })
+        })    
+    })
+})
+
 app.get("/get/data/:idAlat", (req, res) => {
     db.collection("history").doc(req.params.idAlat).get().then(snapshot => {
       console.log(snapshot.data());
